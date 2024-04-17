@@ -123,7 +123,13 @@ void main() {
     },
   ));
 }
-
+ void logout(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), 
+      (route) => false, 
+    );
+  }
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -215,8 +221,9 @@ class CustomDrawer extends StatelessWidget {
               onTap: () {
                 // Navigator.pop(context);
                 // Navigator.pushNamed(context, '/login');
-                                Navigator.push(context, MaterialPageRoute(builder: (ctx)=> LoginPage())); 
+                                // Navigator.push(context, MaterialPageRoute(builder: (ctx)=> LoginPage())); 
                 // Perform logout action here
+                logout(context);
               },
             ),
           ],

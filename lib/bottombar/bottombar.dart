@@ -5,6 +5,7 @@ import 'package:moneyapp/profile/ProfilePage.dart';
 import 'package:moneyapp/widgets/auth/login_page.dart';
 import 'package:moneyapp/widgets/auth/register_page.dart';
 import 'package:moneyapp/widgets/expences.dart';
+import 'package:moneyapp/widgets/history/history_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
 
 class MyBottomBar extends StatefulWidget {
@@ -46,7 +47,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
           ),
           IconButton(
             icon: Icon(Icons.history),
-            onPressed: () => _navigateToPage(context, RegisterPage()),
+            onPressed: () => _navigateToPage(context, historyPage()),
           ),
           IconButton(
             icon: Icon(Icons.person),

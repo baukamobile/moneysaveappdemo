@@ -83,11 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.pop(context);
           }, icon: Icon(Icons.arrow_back)),
           centerTitle: true,
-          title: Text('Уведомления')),
+          title: Text('Notifications')),
           
           
         body: Center(
-          child: Text('Пример уведомлений для Android'),
+          child: Text('Notification page'),
         ),
       ),
     );

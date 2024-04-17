@@ -1,98 +1,133 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:moneyapp/bottombar/bottombar.dart';
+import 'package:moneyapp/models/expence.dart';
 import 'package:moneyapp/widgets/NewAddWindow.dart';
 import 'package:moneyapp/widgets/elements/drawer.dart';
 import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
-import 'package:moneyapp/models/expence.dart';
-
-
 
 class Expences extends StatefulWidget {
-  const Expences({super.key});
+  const Expences({Key? key}) : super(key: key);
 
   @override
   State<Expences> createState() => _ExpencesState();
 }
 
 class _ExpencesState extends State<Expences> {
-  
-  void _removeExpense(Expense expense){
-    setState(() {
-      _registeredExpences.remove(expense);
-    });
-  }
-  void _opendNewAddExpense(){
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    // backgroundColor: Colors.black.withOpacity(0), // Adjust opacity value as needed
-    builder: (ctx) {
-      return NewWindow(onAddExpense: AddExpenses,); // Replace NewWindow() with your widget
-    },
-  );
-}
-void AddExpenses(Expense expense){
-  setState(() {
-  _registeredExpences.add(expense);
-  // Navigator.pop(context);
-  });
-}
-
-double expenseTracker = 10000.0;
+  double expenseTracker = 10000.0;
 
   final List<Expense> _registeredExpences = [
     Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
-    Expense(title: 'hang out with friends', amount: 5000, date: DateTime.now(), category: Category.cafe),
-    Expense(title: 'buy course', amount: 25000, date: DateTime.now(), category: Category.study),
-    Expense(title: 'buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
+    Expense(title: 'Hang out with friends', amount: 5000, date: DateTime.now(), category: Category.cafe),
+    Expense(title: 'Buy course', amount: 25000, date: DateTime.now(), category: Category.study),
+    Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
-  
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpences.remove(expense);
+      expenseTracker+=expense.amount;
+    });
+  }
+
+  void _openNewAddExpense() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) {
+        return NewWindow(onAddExpense: _addExpense);
+      },
+    );
+  }
+
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpences.add(expense);
+      expenseTracker -= expense.amount;
+
+    });
+  }
+  // void _removeExpenses(Expense expense){
+  //   setState(() {
+  //     _registeredExpences.remove(expense);
+  //     expenseTracker+=expense.amount
+  //   });
+  // }
+
+  void _updateExpenseTracker(double newValue) {
+    setState(() {
+      expenseTracker = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         drawer: CustomDrawer(),
         appBar: AppBar(
-          
           backgroundColor: Color.fromARGB(255, 71, 186, 130),
           title: Text('MoneySave'),
           centerTitle: true,
           actions: [
-          IconButton(onPressed: (){
-            _opendNewAddExpense();
-            // Navigator.push(context, MaterialPageRoute(builder: (ctx)=> NewPage()));
-          }, icon: Icon(Icons.add_card))
-        ]),
+            IconButton(
+              onPressed: _openNewAddExpense,
+              icon: Icon(Icons.add_card),
+            ),
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    double newExpenseValue = expenseTracker;
+                    return AlertDialog(
+                      title: Text('Update Expense Tracker'),
+                      content: TextField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          newExpenseValue = double.tryParse(value) ?? expenseTracker;
+                        },
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _updateExpenseTracker(newExpenseValue);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Update'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.edit),
+            ),
+        
+          ],
+        ),
         body: Column(
-          
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 90),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 80),
               child: Row(
                 children: [
-                  Text("Expenses from: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              Text("\$10000", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  Text("Expenses from: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text("\$$expenseTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
-          
             Expanded(
               flex: 1,
-              child: 
-            MyChart()
-            
+              child: MyChart(),
             ),
-            
             Expanded(
               flex: 2,
-              child: ExpensesList(expenses: _registeredExpences, onRemove: _removeExpense,))
+              child: ExpensesList(expenses: _registeredExpences, onRemove: _removeExpense),
+            ),
           ],
         ),
-    // bottomNavigationBar: MyBottomBar(),
       ),
     );
   }
 }
+

@@ -20,8 +20,11 @@ class _IncomesState extends State<Incomes> {
   void _removeExpense(Expense expense) {
     setState(() {
       _registeredExpences.remove(expense);
+      expenseTracker-=expense.amount;
+
     });
   }
+  
   void _opendNewAddExpense(){
   showModalBottomSheet(
     isScrollControlled: true,
@@ -35,11 +38,17 @@ class _IncomesState extends State<Incomes> {
 void AddExpenses(Expense expense){
   setState(() {
   _registeredExpences.add(expense);
+  expenseTracker+=expense.amount;
   // Navigator.pop(context);
   });
 }
 
-  var expenseTracker = 10000;
+double expenseTracker = 10000.0;
+void _updateExpenseTracker(double newValue) {
+    setState(() {
+      expenseTracker = newValue;
+    });
+  }
   
   final List<Expense> _registeredExpences = [
     Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
@@ -61,7 +70,37 @@ void AddExpenses(Expense expense){
           IconButton(onPressed: (){
             _opendNewAddExpense();
             // Navigator.push(context, MaterialPageRoute(builder: (ctx)=> NewPage()));
-          }, icon: Icon(Icons.add_card))
+          }, icon: Icon(Icons.add_card)),
+              IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    double newExpenseValue = expenseTracker;
+                    return AlertDialog(
+                      title: Text('Update Expense Tracker'),
+                      content: TextField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          newExpenseValue = double.tryParse(value) ?? expenseTracker;
+                        },
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _updateExpenseTracker(newExpenseValue);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Update'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.edit),
+            ),
+        
         ]),
         body: Column(
           
@@ -71,7 +110,7 @@ void AddExpenses(Expense expense){
               child: Row(
                 children: [
                   Text("Incomes to: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              Text("\$10000", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              Text("\$$expenseTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

@@ -68,7 +68,7 @@ class _SplitPagesState extends State<SplitPages> {
       GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
-            // Swiped right
+            // Swipe
             if (_currentPageIndex > 0) {
               _currentPageIndex--;
               _pageController.animateToPage(
@@ -78,7 +78,7 @@ class _SplitPagesState extends State<SplitPages> {
               );
             }
           } else if (details.primaryVelocity! < 0) {
-            // Swiped left
+            // Swipe
             if (_currentPageIndex < 1) {
               _currentPageIndex++;
               _pageController.animateToPage(

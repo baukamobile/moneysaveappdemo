@@ -2,46 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:moneyapp/models/style/style.dart';
 import 'package:moneyapp/widgets/auth/login_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatelessWidget {
-   RegisterPage({super.key});
-   final String apiUrl = "http://localhost:8000/api/register/";
-   TextEditingController nameController = TextEditingController();
+  String apiUrl = "http://127.0.0.1:8000/api/register/";
+  
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  
-  get http => null;
 
-   Future<void> register(BuildContext context) async {
-     try {
-       final response = await http.post(
-         Uri.parse(apiUrl),
-         body: {
-           'name': nameController.text,
-           'email': emailController.text,
-           'password': passwordController.text,
-         },
-       );
+  Future<void> register(BuildContext context) async {
+    try {
+      final response = await http.post(
+        // Uri.parse(apiUrl),
+        Uri.parse("http://10.0.2.2:8000/api/register/"),
+        body: {
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
+      );
 
-       if (response.statusCode == 200) {
-         // If the server returns a 200 OK response, you can handle the login success
-         // For example, you can navigate to another screen.
-         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-         print('register successful!');
-       }
-       if(response.statusCode ==200){
-         Navigator.of(context).push(MaterialPageRoute(builder: (context) => SplitPages()));
-       }
-       else {
-         // If the server did not return a 200 OK response,
-         // throw an exception or display an error message.
-         print('register failed');
-       }
-     } catch (e) {
-       // Exception occurred, login failed
-       print('register failed: $e');
-     }
-   }
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplitPages()));
+        print('Register successful!');
+      } else {
+        print('Register failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Register failed: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

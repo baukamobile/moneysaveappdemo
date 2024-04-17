@@ -1,48 +1,52 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:moneyapp/widgets/auth/register_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
 import 'dart:core';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  final String apiUrl = "http://10.0.2.2:8000/api/login/";
+  final String apiUrl = "http://192.168.3.204:8000/api/login/";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   
-  get http => null;
+  final http.Client client = http.Client();
 
-  Future<void> login(BuildContext context) async {
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: {
-          'email': emailController.text,
-          'password': passwordController.text,
-        },
+Future<void> login(BuildContext context) async {
+  try {
+    final response = await client.post(
+      Uri.parse(apiUrl),
+      body: {
+        'email': emailController.text,
+        'password': passwordController.text,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SplitPages()),
       );
-
-      if (response.statusCode == 200) {
-        // If the server returns a 200 OK response, you can handle the login success
-        // For example, you can navigate to another screen.
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        print('Login successful!');
-      }
-      if(response.statusCode==200){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SplitPages()));
-      }
-
-      else {
-        // If the server did not return a 200 OK response,
-        // throw an exception or display an error message.
-        print('Login failed');
-      }
-    } catch (e) {
-      // Exception occurred, login failed
-      print('Login failed: $e');
+      print('Login successful!');
+    } else {
+      print('Login failed with status code: ${response.statusCode}');
     }
+  } on SocketException catch (e) {
+    print('SocketException: Failed to connect to the server. Error: $e');
+  } on HttpException catch (e) {
+    print('HttpException: Failed to fetch data. Error: $e');
+
+  } on FormatException catch (e) {
+    print('FormatException: Invalid server response. Error: $e');
+
+  } catch (e) {
+    print('Unexpected error during login: $e');
+
   }
+}
 
   @override
   Widget build(BuildContext context) {
