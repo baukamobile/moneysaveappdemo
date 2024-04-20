@@ -4,7 +4,8 @@ import 'package:moneyapp/widgets/NewAddWindow.dart';
 import 'package:moneyapp/widgets/elements/drawer.dart';
 import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 class Expences extends StatefulWidget {
   const Expences({Key? key}) : super(key: key);
 
@@ -21,6 +22,45 @@ class _ExpencesState extends State<Expences> {
     Expense(title: 'Buy course', amount: 25000, date: DateTime.now(), category: Category.study),
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
+  void _addExpense(Expense expense) async {
+  final url = 'http://172.22.101.26:8000/addexpenses/';
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': expense.title,
+        'amount': expense.amount,
+        'created_at': expense.date.toIso8601String(),
+        'user_id': 1, // Replace with the actual user ID or send it from your app
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // Expense added successfully
+      setState(() {
+        _registeredExpences.add(expense);
+        expenseTracker -= expense.amount;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Succesfully added'),));
+    } else {
+      // Handle error response from server
+      // For example, show a snackbar with error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add expense')),
+      );
+    }
+  } catch (e) {
+    // Handle network or other errors
+    print('Error: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to add expense')),
+    );
+  }
+}
 
   void _removeExpense(Expense expense) {
     setState(() {
@@ -39,13 +79,13 @@ class _ExpencesState extends State<Expences> {
     );
   }
 
-  void _addExpense(Expense expense) {
-    setState(() {
-      _registeredExpences.add(expense);
-      expenseTracker -= expense.amount;
+  // void _addExpense(Expense expense) {
+  //   setState(() {
+  //     _registeredExpences.add(expense);
+  //     expenseTracker -= expense.amount;
 
-    });
-  }
+  //   });
+  // }
   // void _removeExpenses(Expense expense){
   //   setState(() {
   //     _registeredExpences.remove(expense);

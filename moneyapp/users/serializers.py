@@ -16,3 +16,15 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+
+class IncomeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Incomes
+        fields = '__all__'
