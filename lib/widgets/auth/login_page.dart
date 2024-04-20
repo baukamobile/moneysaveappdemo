@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  final String apiUrl = "http://192.168.3.204:8000/api/login/";
+  final String apiUrl = 
+  // "http://192.168.192.204:8000/api/login/";
+  "http://172.22.101.26:8000/api/login/";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   
@@ -163,3 +165,4 @@ Future<void> login(BuildContext context) async {
 
 
 //ip address 172.22.101.255
+// http://127.0.0.1:8000/api/login/

@@ -25,13 +25,13 @@ SECRET_KEY = 'django-insecure-dfj1_s7_)5^!gok+rdb8wyd-n34=fd=bomumav05hsen)x8zxu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-EMAIL_HOST = 'live.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'baukabakbergen003@gmail.com'
-EMAIL_HOST_PASSWORD = '93a6da14df73bced38cffdae0c987ff2'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'live.smtp.mailtrap.io'
+# EMAIL_HOST_USER = 'baukabakbergen003@gmail.com'
+# EMAIL_HOST_PASSWORD = '93a6da14df73bced38cffdae0c987ff2'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # iydr oboh nurh gsms
 ALLOWED_HOSTS = ["*"]
 
