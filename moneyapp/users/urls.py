@@ -7,7 +7,7 @@ urlpatterns = [
     path('login/', LoginView.as_view()),
     path('user/', UserView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('addexpenses/', add_expense),
-    path('addincomes/', add_income)
+    path('add_expenses/', add_expense),
+    path('add_incomes/', add_income)
 
 ]

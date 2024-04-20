@@ -6,6 +6,7 @@ import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 class Expences extends StatefulWidget {
   const Expences({Key? key}) : super(key: key);
 
@@ -14,6 +15,8 @@ class Expences extends StatefulWidget {
 }
 
 class _ExpencesState extends State<Expences> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+  
   double expenseTracker = 10000.0;
 
   final List<Expense> _registeredExpences = [
@@ -23,7 +26,7 @@ class _ExpencesState extends State<Expences> {
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
   void _addExpense(Expense expense) async {
-  final url = 'http://172.22.101.26:8000/addexpenses/';
+  final url = 'http://172.22.101.26:8000/api/add_expenses/';
 
   try {
     final response = await http.post(
@@ -34,8 +37,8 @@ class _ExpencesState extends State<Expences> {
       body: jsonEncode(<String, dynamic>{
         'name': expense.title,
         'amount': expense.amount,
-        'created_at': expense.date.toIso8601String(),
-        'user_id': 1, // Replace with the actual user ID or send it from your app
+        'created_at': formatter.format(expense.date),
+        'user': 17, // Replace with the actual user ID or send it from your app
       }),
     );
 
@@ -47,7 +50,7 @@ class _ExpencesState extends State<Expences> {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Succesfully added'),));
     } else {
-      // Handle error response from server
+      // Handle error response from servers
       // For example, show a snackbar with error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add expense')),
