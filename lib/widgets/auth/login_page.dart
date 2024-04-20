@@ -166,3 +166,7 @@ Future<void> login(BuildContext context) async {
 
 //ip address 172.22.101.255
 // http://127.0.0.1:8000/api/login/
+
+//  python3 manage.py runserver 172.22.101.26:8000 this my ip adress 
+// in library. If i open my hotspot i will write ifconfig and search my
+//ip adress

@@ -1,13 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ExpenseSerializer, IncomeSerializer
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 import jwt, datetime
 import logging
 from django.contrib.auth import authenticate
+from rest_framework.decorators import api_view
 
 
 # Create your views here.
@@ -94,3 +95,19 @@ class LogoutView(APIView):
             'message': 'success'
         }
         return response
+    
+@api_view(['POST'])    
+def add_expense(request):
+    serializer = ExpenseSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def add_income(request):
+    serializer = IncomeSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
