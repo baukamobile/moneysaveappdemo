@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-dfj1_s7_)5^!gok+rdb8wyd-n34=fd=bomumav05hsen)x8zxu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 # EMAIL_HOST = 'live.smtp.mailtrap.io'
 # EMAIL_HOST_USER = 'baukabakbergen003@gmail.com'
 # EMAIL_HOST_PASSWORD = '93a6da14df73bced38cffdae0c987ff2'
@@ -139,3 +140,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_POST = 587
+EMAIL_HOST_USER= 'baukabakbegen003@gmail.com'
+EMAIL_HOST_PASSWORD= 'upam kbxb lomv bolc'
+
+#upam kbxb lomv bolc

@@ -1,6 +1,9 @@
+from django.http.response import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+
+from moneyapp.settings import EMAIL_HOST_USER
 from .serializers import UserSerializer, ExpenseSerializer, IncomeSerializer
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -9,7 +12,9 @@ import jwt, datetime
 import logging
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
-
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 
 # Create your views here.
 class RegisterView(APIView):
@@ -95,8 +100,8 @@ class LogoutView(APIView):
             'message': 'success'
         }
         return response
-    
-@api_view(['POST'])    
+
+@api_view(['POST'])
 def add_expense(request):
     serializer = ExpenseSerializer(data=request.data)
     if serializer.is_valid():
@@ -111,3 +116,20 @@ def add_income(request):
         serializer.save()
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
+
+
+
+
+def sendEmail(request):
+    email = EmailMessage(
+        template = render_to_string('templates/index.html',
+            'name':request.POST['name],
+            'email':request.POST['email']
+            'message':request.POST['message']
+        )
+        request.POST['subject']
+        template,
+        settings.EMAIL_HOST_USER,
+        ['baukabakbergen003@gmail.com']
+    )
+    return JsonResponse('Email was sent')
