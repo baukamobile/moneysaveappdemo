@@ -35,7 +35,7 @@ class _ExpencesState extends State<Expences> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'name': expense.title,
+        'name': expense.title, 
         'amount': expense.amount,
         'created_at': formatter.format(expense.date),
         'user': 17, // Replace with the actual user ID or send it from your app

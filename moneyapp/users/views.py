@@ -1,8 +1,9 @@
 from django.http.response import JsonResponse
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-
+from django.contrib import redirects
 from moneyapp.settings import EMAIL_HOST_USER
 from .serializers import UserSerializer, ExpenseSerializer, IncomeSerializer
 from .models import User
@@ -15,7 +16,8 @@ from rest_framework.decorators import api_view
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.template.loader import render_to_string
-
+from django.core.mail import send_mail
+from django.shortcuts import redirect, render
 # Create your views here.
 class RegisterView(APIView):
     def post(self, request):
@@ -120,16 +122,13 @@ def add_income(request):
 
 
 
-def sendEmail(request):
-    email = EmailMessage(
-        template = render_to_string('templates/index.html',
-            'name':request.POST['name],
-            'email':request.POST['email']
-            'message':request.POST['message']
-        )
-        request.POST['subject']
-        template,
-        settings.EMAIL_HOST_USER,
-        ['baukabakbergen003@gmail.com']
-    )
-    return JsonResponse('Email was sent')
+def send_email(request):
+    subject = 'Thank you for registering to our site'
+    message = ' it  means a world to us '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['bauyrzanbakbergen87@gmail.com',]
+    send_mail( subject, message, email_from, recipient_list )
+    return redirect('template/base.html')
+
+def first_page(request):
+    return redirect(request, 'template/index.html')

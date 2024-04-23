@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import RegisterView, LoginView,sendEmail, UserView, LogoutView, add_expense, add_income
+from .views import RegisterView, LoginView, UserView, LogoutView, add_expense, add_income, first_page
 
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('add_expenses/', add_expense),
     path('add_incomes/', add_income),
-    path('send_email/',sendEmail, name='send_email' )
+    path('first/', first_page),
+    # path('send_email/',send_email, name='send_email' )
 
 ]
