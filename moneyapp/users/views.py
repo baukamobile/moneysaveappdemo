@@ -32,6 +32,7 @@ class RegisterView(APIView):
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh)
         }, status=status.HTTP_201_CREATED)
+    
 
 
 class LoginView(APIView):
@@ -126,7 +127,7 @@ def send_email(request):
     subject = 'Thank you for registering to our site'
     message = ' it  means a world to us '
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['bauyrzanbakbergen87@gmail.com',]
+    recipient_list = ['abylaikhanbariev7@gmail.com',]
     send_mail( subject, message, email_from, recipient_list )
     return redirect('template/base.html')
 

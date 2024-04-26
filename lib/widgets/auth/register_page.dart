@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:moneyapp/models/style/style.dart';
+import 'package:moneyapp/profile/ProfilePage.dart';
 import 'package:moneyapp/widgets/auth/login_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatelessWidget {
-  String apiUrl = "http://172.22.101.26:8000/api/register/";
+  String apiUrl = "http://172.20.102.202:8000/api/register/";
   
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -24,7 +25,11 @@ class RegisterPage extends StatelessWidget {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SplitPages()));
+        Navigator.pushReplacement(context, 
+        MaterialPageRoute(builder: (context) => SplitPages()));
+        // MaterialPageRoute(
+        //   builder: (context) => profilePage(name: nameController.text),
+        // ));
         print('Register successful!');
       } else {
         print('Register failed with status code: ${response.statusCode}');

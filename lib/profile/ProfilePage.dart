@@ -3,6 +3,11 @@ import 'package:moneyapp/bottombar/bottombar.dart';
 import 'package:moneyapp/widgets/auth/login_page.dart';
 
 class profilePage extends StatelessWidget {
+  TextEditingController nameController = TextEditingController();
+  // String name;
+
+  // profilePage({required this.name});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,8 @@ class profilePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'John Doe',
+              
+              'Hello',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

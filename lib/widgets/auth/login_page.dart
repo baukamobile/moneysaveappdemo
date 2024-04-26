@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
 
   final String apiUrl = 
   // "http://192.168.192.204:8000/api/login/";
-  "http://172.22.101.26:8000/api/login/";
+  "http://172.20.102.202:8000/api/login/";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   
