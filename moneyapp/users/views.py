@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
+
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib import redirects
 from moneyapp.settings import EMAIL_HOST_USER
@@ -19,6 +19,10 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .serializers import ExpenseSerializer
 # Create your views here.
 class RegisterView(APIView):
     def post(self, request):
@@ -120,6 +124,16 @@ class LogoutView(APIView):
         }
         return response
 
+# @api_view(['POST'])
+# def add_expense(request):
+#     serializer = ExpenseSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=201)
+#     return Response(serializer.errors, status=400)
+
+
+
 @api_view(['POST'])
 def add_expense(request):
     serializer = ExpenseSerializer(data=request.data)
@@ -139,13 +153,21 @@ def add_income(request):
 
 
 
-def send_email(request):
-    subject = 'Thank you for registering to our site'
-    message = ' it  means a world to us '
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['abylaikhanbariev7@gmail.com',]
-    send_mail( subject, message, email_from, recipient_list )
-    return redirect('template/base.html')
+# def send_email(request):
+#     subject = 'Thank you for registering to our site'
+#     message = ' it  means a world to us '
+#     email_from = settings.EMAIL_HOST_USER
+#     recipient_list = ['abylaikhanbariev7@gmail.com',]
+#     send_mail( subject, message, email_from, recipient_list )
+#     return redirect('template/base.html')
 
 def first_page(request):
     return redirect(request, 'template/index.html')
+
+
+
+{
+"email": "iphone@gmail.com",
+"password": "iphone"
+
+}

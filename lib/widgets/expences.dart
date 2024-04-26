@@ -5,8 +5,10 @@ import 'package:moneyapp/widgets/elements/drawer.dart';
 import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
 import 'dart:convert';
+import 'package:uuid/v4.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'dart:math';
 class Expences extends StatefulWidget {
   const Expences({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class Expences extends StatefulWidget {
 
 class _ExpencesState extends State<Expences> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-  
+  Random random = Random();
   double expenseTracker = 10000.0;
 
   final List<Expense> _registeredExpences = [
@@ -26,7 +28,7 @@ class _ExpencesState extends State<Expences> {
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
   void _addExpense(Expense expense) async {
-  final url = 'http://172.22.101.26:8000/api/add_expenses/';
+  final url = 'http://172.20.102.202:8000/api/add_expenses/';
 
   try {
     final response = await http.post(
@@ -38,7 +40,8 @@ class _ExpencesState extends State<Expences> {
         'name': expense.title, 
         'amount': expense.amount,
         'created_at': formatter.format(expense.date),
-        'user': 17, // Replace with the actual user ID or send it from your app
+        'user': 10, 
+        // Replace with the actual user ID or send it from your app
       }),
     );
 
