@@ -16,7 +16,7 @@ class RegisterPage extends StatelessWidget {
     try {
       final response = await http.post(
         // Uri.parse(apiUrl),
-        Uri.parse("http://172.22.101.26:8000/api/register/"),
+        Uri.parse("http://172.20.102.202:8000/api/register/"),
         body: {
           'name': nameController.text,
           'email': emailController.text,

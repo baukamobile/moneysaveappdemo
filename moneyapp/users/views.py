@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.http.response import JsonResponse
 
 from rest_framework.views import APIView
@@ -21,17 +22,32 @@ from django.shortcuts import redirect, render
 # Create your views here.
 class RegisterView(APIView):
     def post(self, request):
+        # First, register the user
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
+        # Generate JWT tokens for the registered user
         refresh = RefreshToken.for_user(user)
 
-        return Response({
-            'message': 'User registered successfully.',
-            'access_token': str(refresh.access_token),
-            'refresh_token': str(refresh)
-        }, status=status.HTTP_201_CREATED)
+        # Send email notification
+        subject = 'Welcome to MoneyApp'
+        message = 'Thank you for registering with MoneyApp. Enjoy our services!'
+        sender = 'example@example.com'  # Update with your sender email
+        recipient_list = [user.email]  # Assuming user has an email field
+
+        try:
+            send_mail(subject, message, sender, recipient_list)
+            return Response({
+                'message': 'User registered successfully. Email sent.',
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            # If email sending fails, delete the user and return an error
+            user.delete()
+            return Response(f"User registration failed. An error occurred: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 
 
