@@ -44,6 +44,7 @@ dependencies:
   sqflite: ^2.3.2
   path: ^1.8.3
   connectivity: ^3.0.6
+  shared_preferences: ^2.2.3
   
   # d_chart: ^2.6.9
 
