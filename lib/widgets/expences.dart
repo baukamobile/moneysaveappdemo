@@ -20,6 +20,7 @@ class _ExpencesState extends State<Expences> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
   Random random = Random();
   double expenseTracker = 10000.0;
+  
 
   final List<Expense> _registeredExpences = [
     Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
