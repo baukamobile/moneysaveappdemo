@@ -28,3 +28,4 @@ class IncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incomes
         fields = '__all__'
+

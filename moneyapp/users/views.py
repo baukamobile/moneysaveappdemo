@@ -9,7 +9,7 @@ from moneyapp.settings import EMAIL_HOST_USER
 from .serializers import UserSerializer, ExpenseSerializer, IncomeSerializer
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
+from rest_framework import status, viewsets
 import jwt, datetime
 import logging
 from django.contrib.auth import authenticate
@@ -24,6 +24,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import ExpenseSerializer
 # Create your views here.
+
 class RegisterView(APIView):
     def post(self, request):
         # First, register the user
@@ -166,8 +167,8 @@ def first_page(request):
 
 
 
-{
-"email": "iphone@gmail.com",
-"password": "iphone"
+# {
+# "email": "iphone@gmail.com",
+# "password": "iphone"
 
-}
+# }
