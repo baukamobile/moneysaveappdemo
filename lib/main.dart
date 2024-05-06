@@ -5,6 +5,7 @@ import 'widgets/expences.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: SplitPages(),
   ));
 }

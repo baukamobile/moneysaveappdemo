@@ -28,7 +28,7 @@ class _ExpencesState extends State<Expences> {
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
   void _addExpense(Expense expense) async {
-  final url = 'http://172.20.102.202:8000/api/add_expenses/';
+  final url = 'http://172.20.103.61:8000/api/add_expenses/';
 
   try {
     final response = await http.post(

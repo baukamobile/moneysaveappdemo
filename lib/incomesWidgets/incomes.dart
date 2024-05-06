@@ -1,14 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:moneyapp/bottombar/bottombar.dart';
+import 'package:moneyapp/models/expence.dart';
 import 'package:moneyapp/widgets/NewAddWindow.dart';
 import 'package:moneyapp/widgets/elements/drawer.dart';
 import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
-import 'package:moneyapp/models/expence.dart';
-import 'package:mrx_charts/mrx_charts.dart';
-
+import 'dart:convert';
+import 'package:uuid/v4.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'dart:math';
 class Incomes extends StatefulWidget {
   const Incomes({Key? key}) : super(key: key);
 
@@ -17,61 +17,110 @@ class Incomes extends StatefulWidget {
 }
 
 class _IncomesState extends State<Incomes> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+  Random random = Random();
+  double expenseTracker = 10000.0;
+
+  final List<Expense> _registeredExpences = [
+    Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
+    Expense(title: 'Hang out with friends', amount: 5000, date: DateTime.now(), category: Category.cafe),
+    Expense(title: 'Buy course', amount: 25000, date: DateTime.now(), category: Category.study),
+    Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
+  ];
+  void _addExpense(Expense expense) async {
+  final url = 'http://172.20.103.61:8000/api/add_incomes/';
+
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': expense.title, 
+        'amount': expense.amount,
+        'created_at': formatter.format(expense.date),
+        'user': 10, 
+        // Replace with the actual user ID or send it from your app
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // Expense added successfully
+      setState(() {
+        _registeredExpences.add(expense);
+        expenseTracker += expense.amount;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Succesfully added'),));
+    } else {
+      // Handle error response from servers
+      // For example, show a snackbar with error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add expense')),
+      );
+    }
+  } catch (e) {
+    // Handle network or other errors
+    print('Error: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to add expense')),
+    );
+  }
+}
+
   void _removeExpense(Expense expense) {
     setState(() {
       _registeredExpences.remove(expense);
-      expenseTracker-=expense.amount;
-
+      expenseTracker+=expense.amount;
     });
   }
-  
-  void _opendNewAddExpense(){
-  showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    // backgroundColor: Colors.black.withOpacity(0), // Adjust opacity value as needed
-    builder: (ctx) {
-      return NewWindow(onAddExpense: AddExpenses,); // Replace NewWindow() with your widget
-    },
-  );
-}
-void AddExpenses(Expense expense){
-  setState(() {
-  _registeredExpences.add(expense);
-  expenseTracker+=expense.amount;
-  // Navigator.pop(context);
-  });
-}
 
-double expenseTracker = 10000.0;
-void _updateExpenseTracker(double newValue) {
+  void _openNewAddExpense() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) {
+        return NewWindow(onAddExpense: _addExpense);
+      },
+    );
+  }
+
+  // void _addExpense(Expense expense) {
+  //   setState(() {
+  //     _registeredExpences.add(expense);
+  //     expenseTracker -= expense.amount;
+
+  //   });
+  // }
+  // void _removeExpenses(Expense expense){
+  //   setState(() {
+  //     _registeredExpences.remove(expense);
+  //     expenseTracker+=expense.amount
+  //   });
+  // }
+
+  void _updateExpenseTracker(double newValue) {
     setState(() {
       expenseTracker = newValue;
     });
   }
-  
-  final List<Expense> _registeredExpences = [
-    Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
-    Expense(title: 'hang out with friends', amount: 5000, date: DateTime.now(), category: Category.cafe),
-    Expense(title: 'buy course', amount: 25000, date: DateTime.now(), category: Category.study),
-    Expense(title: 'buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
-  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         drawer: CustomDrawer(),
         appBar: AppBar(
-          
           backgroundColor: Color.fromARGB(255, 71, 186, 130),
           title: Text('MoneySave'),
           centerTitle: true,
           actions: [
-          IconButton(onPressed: (){
-            _opendNewAddExpense();
-            // Navigator.push(context, MaterialPageRoute(builder: (ctx)=> NewPage()));
-          }, icon: Icon(Icons.add_card)),
-              IconButton(
+            IconButton(
+              onPressed: _openNewAddExpense,
+              icon: Icon(Icons.add_card),
+            ),
+            IconButton(
               onPressed: () {
                 showDialog(
                   context: context,
@@ -101,76 +150,31 @@ void _updateExpenseTracker(double newValue) {
               icon: Icon(Icons.edit),
             ),
         
-        ]),
+          ],
+        ),
         body: Column(
-          
           children: [
-  Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 90),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 80),
               child: Row(
                 children: [
-                  Text("Incomes to: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              Text("\$$expenseTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text("Incomes from: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text("\$$expenseTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
-          
-
-
             Expanded(
               flex: 1,
-              child: Chart(
-              layers: [
-                ChartAxisLayer(
-                  settings: ChartAxisSettings(
-                    x: ChartAxisSettingsAxis(
-              frequency: 1.0,
-              max: 13.0,
-              min: 7.0,
-              textStyle: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 10.0,
-                ),
-              ),
-              y: ChartAxisSettingsAxis(
-                frequency: 100.0,
-                max: 300.0,
-                min: 0.0,
-                textStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
-                  fontSize: 10.0,
-                ),
-              ),
-                    ),
-                    labelX: (value) => value.toInt().toString(),
-                    labelY: (value) => value.toInt().toString(),
-                  ),
-                  ChartBarLayer(
-                    items: List.generate(
-              13 - 7 + 1,
-              (index) => ChartBarDataItem(
-                color: const Color.fromARGB(255, 71, 186, 130),
-                value: Random().nextInt(280) + 20,
-                x: index.toDouble() + 7,
-              ),
-                    ),
-                    settings: const ChartBarSettings(
-              thickness: 8.0,
-              radius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                  ),
-                
-              ]
+              child: MyChart(),
             ),
-            ),
-            
             Expanded(
               flex: 2,
-              child: ExpensesList(expenses: _registeredExpences, onRemove: _removeExpense,))
+              child: ExpensesList(expenses: _registeredExpences, onRemove: _removeExpense),
+            ),
           ],
         ),
-    // bottomNavigationBar: MyBottomBar(),
       ),
     );
   }
 }
+

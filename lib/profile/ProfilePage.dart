@@ -4,10 +4,8 @@ import 'package:moneyapp/widgets/auth/login_page.dart';
 
 class profilePage extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
-  // String name;
-
-  // profilePage({required this.name});
-  
+  String name;
+  profilePage({required this.name});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +47,7 @@ class profilePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             _buildInfoCard(Icons.email, 'Email', 'johndoe@example.com'),
-            _buildInfoCard(Icons.phone, 'Phone', '+1 234 567 890'),
+
             _buildInfoCard(Icons.location_on, 'Location', 'New York, USA'),
           ],
         ),

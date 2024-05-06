@@ -51,7 +51,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
           ),
           IconButton(
             icon: Icon(Icons.person),
-            onPressed: () => _navigateToPage(context, profilePage()),
+            onPressed: () => _navigateToPage(context, profilePage(name: '',)),
           ),
         ],
       ),
