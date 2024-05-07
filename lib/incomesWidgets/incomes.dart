@@ -36,17 +36,18 @@ class _IncomesState extends State<Incomes> {
     _loadExpenseTracker(); // Загрузка значения expenseTracker при инициализации виджета
   }
 
-  _loadExpenseTracker() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      expenseTracker = prefs.getDouble('expenseTracker') ?? 10000.0;
-    });
-  }
-
-  _saveExpenseTrackerIncomes(double value) async {
+ _loadExpenseTracker() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setDouble('expenseTrackerIncomes', value);
+  setState(() {
+    expenseTracker = prefs.getDouble('expenseTracker') ?? 10000.0;
+  });
 }
+
+_saveExpenseTrackerIncomes(double value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setDouble('expenseTracker', value);
+}
+
 void _addExpense(Expense expense) async {
   final url = 'http://172.20.103.61:8000/api/add_expenses/';
   try {
