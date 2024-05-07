@@ -47,7 +47,6 @@ class _IncomesState extends State<Incomes> {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setDouble('expenseTrackerIncomes', value);
 }
-
 void _addExpense(Expense expense) async {
   final url = 'http://172.20.103.61:8000/api/add_expenses/';
   try {
