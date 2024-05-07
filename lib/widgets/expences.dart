@@ -84,11 +84,13 @@ void _addExpense(Expense expense) async {
 
 
   void _removeExpense(Expense expense) {
-    setState(() {
-      _registeredExpences.remove(expense);
-      expenseTracker+=expense.amount;
-    });
-  }
+  setState(() {
+    _registeredExpences.remove(expense);
+    expenseTracker += expense.amount; // Увеличиваем expenseTracker на сумму расхода
+    _saveExpenseTrackerExpenses(expenseTracker); // Сохраняем измененное значение expenseTracker
+  });
+}
+
 
   void _openNewAddExpense() {
     showModalBottomSheet(
@@ -99,20 +101,6 @@ void _addExpense(Expense expense) async {
       },
     );
   }
-
-  // void _addExpense(Expense expense) {
-  //   setState(() {
-  //     _registeredExpences.add(expense);
-  //     expenseTracker -= expense.amount;
-
-  //   });
-  // }
-  // void _removeExpenses(Expense expense){
-  //   setState(() {
-  //     _registeredExpences.remove(expense);
-  //     expenseTracker+=expense.amount
-  //   });
-  // }
 
   void _updateExpenseTracker(double newValue) {
     setState(() {
