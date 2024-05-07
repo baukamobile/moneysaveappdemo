@@ -9,6 +9,7 @@ import 'package:uuid/v4.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 class Incomes extends StatefulWidget {
   const Incomes({Key? key}) : super(key: key);
 
@@ -27,10 +28,28 @@ class _IncomesState extends State<Incomes> {
     Expense(title: 'Buy course', amount: 25000, date: DateTime.now(), category: Category.study),
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
-  void _addExpense(Expense expense) async {
-  final url = 'http://172.20.103.61:8000/api/add_incomes/';
 
 
+  @override
+  void initState() {
+    super.initState();
+    _loadExpenseTracker(); // Загрузка значения expenseTracker при инициализации виджета
+  }
+
+  _loadExpenseTracker() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      expenseTracker = prefs.getDouble('expenseTracker') ?? 10000.0;
+    });
+  }
+
+  _saveExpenseTrackerIncomes(double value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setDouble('expenseTrackerIncomes', value);
+}
+
+void _addExpense(Expense expense) async {
+  final url = 'http://172.20.103.61:8000/api/add_expenses/';
   try {
     final response = await http.post(
       Uri.parse(url),
@@ -38,30 +57,25 @@ class _IncomesState extends State<Incomes> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'name': expense.title, 
+        'name': expense.title,
         'amount': expense.amount,
         'created_at': formatter.format(expense.date),
-        'user': 10, 
-        // Replace with the actual user ID or send it from your app
       }),
     );
 
     if (response.statusCode == 201) {
-      // Expense added successfully
       setState(() {
         _registeredExpences.add(expense);
         expenseTracker += expense.amount;
+        _saveExpenseTrackerIncomes(expenseTracker); // Сохранение значения после изменения
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Succesfully added'),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Successfully added')));
     } else {
-      // Handle error response from servers
-      // For example, show a snackbar with error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add expense')),
       );
     }
   } catch (e) {
-    // Handle network or other errors
     print('Error: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Failed to add expense')),
