@@ -17,7 +17,7 @@ class Expences extends StatefulWidget {
 }
 
 class _ExpencesState extends State<Expences> {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   Random random = Random();
   double expenseTracker = 10000.0;
   
@@ -28,7 +28,7 @@ class _ExpencesState extends State<Expences> {
     Expense(title: 'Buy course', amount: 25000, date: DateTime.now(), category: Category.study),
     Expense(title: 'Buy work things', amount: 1000, date: DateTime.now(), category: Category.work),
   ];
-  void _addExpense(Expense expense) async {
+void _addExpense(Expense expense) async {
   final url = 'http://172.20.103.61:8000/api/add_expenses/';
 
   try {
@@ -41,8 +41,7 @@ class _ExpencesState extends State<Expences> {
         'name': expense.title, 
         'amount': expense.amount,
         'created_at': formatter.format(expense.date),
-        'user': 10, 
-        // Replace with the actual user ID or send it from your app
+        // 'user': 10, // Optionally, include user ID if needed
       }),
     );
 
@@ -52,10 +51,9 @@ class _ExpencesState extends State<Expences> {
         _registeredExpences.add(expense);
         expenseTracker -= expense.amount;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Succesfully added'),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Successfully added')));
     } else {
       // Handle error response from servers
-      // For example, show a snackbar with error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add expense')),
       );
@@ -68,6 +66,7 @@ class _ExpencesState extends State<Expences> {
     );
   }
 }
+
 
   void _removeExpense(Expense expense) {
     setState(() {
