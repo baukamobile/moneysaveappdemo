@@ -20,7 +20,7 @@ class Incomes extends StatefulWidget {
 class _IncomesState extends State<Incomes> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
   Random random = Random();
-  double expenseTracker = 10000.0;
+  double incomeTracker = 10000.0;
 
   final List<Expense> _registeredExpences = [
     Expense(title: 'Breakfast', amount: 2000, date: DateTime.now(), category: Category.food),
@@ -39,13 +39,13 @@ class _IncomesState extends State<Incomes> {
  _loadExpenseTracker() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   setState(() {
-    expenseTracker = prefs.getDouble('expenseTracker') ?? 10000.0;
+    incomeTracker = prefs.getDouble('incomeTracker') ?? 10000.0;
   });
 }
 
 _saveExpenseTrackerIncomes(double value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setDouble('expenseTracker', value);
+  await prefs.setDouble('incomeTracker', value);
 }
 
 void _addExpense(Expense expense) async {
@@ -66,8 +66,8 @@ void _addExpense(Expense expense) async {
     if (response.statusCode == 201) {
       setState(() {
         _registeredExpences.add(expense);
-        expenseTracker += expense.amount;
-        _saveExpenseTrackerIncomes(expenseTracker); // Сохранение значения после изменения
+        incomeTracker += expense.amount;
+        _saveExpenseTrackerIncomes(incomeTracker); // Сохранение значения после изменения
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Successfully added')));
     } else {
@@ -86,7 +86,7 @@ void _addExpense(Expense expense) async {
   void _removeExpense(Expense expense) {
     setState(() {
       _registeredExpences.remove(expense);
-      expenseTracker+=expense.amount;
+      incomeTracker+=expense.amount;
     });
   }
 
@@ -116,7 +116,7 @@ void _addExpense(Expense expense) async {
 
   void _updateExpenseTracker(double newValue) {
     setState(() {
-      expenseTracker = newValue;
+      incomeTracker = newValue;
     });
   }
 
@@ -139,13 +139,13 @@ void _addExpense(Expense expense) async {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    double newExpenseValue = expenseTracker;
+                    double newExpenseValue = incomeTracker;
                     return AlertDialog(
                       title: Text('Update Expense Tracker'),
                       content: TextField(
                         keyboardType: TextInputType.number,
                         onChanged: (value) {
-                          newExpenseValue = double.tryParse(value) ?? expenseTracker;
+                          newExpenseValue = double.tryParse(value) ?? incomeTracker;
                         },
                       ),
                       actions: [
@@ -173,7 +173,7 @@ void _addExpense(Expense expense) async {
               child: Row(
                 children: [
                   Text("Incomes from: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Text("\$$expenseTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text("\$$incomeTracker", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
