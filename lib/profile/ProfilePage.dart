@@ -3,11 +3,10 @@ import 'package:moneyapp/bottombar/bottombar.dart';
 import 'package:moneyapp/widgets/auth/login_page.dart';
 
 class profilePage extends StatelessWidget {
-  final String name;
-  final String email;
-
-  profilePage({required this.name, required this.email});
-
+  
+  TextEditingController nameController = TextEditingController();
+  String name;
+  profilePage({required this.name});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,36 +21,38 @@ class profilePage extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 71, 186, 130),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            CircleAvatar(
-              radius: 80,
-              backgroundImage: AssetImage('img/plane.png'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              
-              '$name',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              CircleAvatar(
+                radius: 80,
+                backgroundImage: AssetImage('img/user.png'),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Flutter Developer',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[700],
+              SizedBox(height: 20),
+              Text(
+                
+                'Hello',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            _buildInfoCard(Icons.email, 'Email', '$email'),
-
-            _buildInfoCard(Icons.location_on, 'Location', 'New York, USA'),
-          ],
+              SizedBox(height: 10),
+              Text(
+                'Flutter Developer',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[700],
+                ),
+              ),
+              SizedBox(height: 20),
+              // _buildInfoCard(Icons.email, 'Email', 'johndoe@example.com'),
+        
+              // _buildInfoCard(Icons.location_on, 'Location', 'New York, USA'),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: MyBottomBar(),

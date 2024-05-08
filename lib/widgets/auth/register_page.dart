@@ -11,41 +11,31 @@ class RegisterPage extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-Future<void> register(BuildContext context) async {
-  try {
-    final response = await http.post(
-      Uri.parse("http://172.20.103.61:8000/api/register/"),
-      body: {
-        'name': nameController.text,
-        'email': emailController.text,
-        'password': passwordController.text,
-      },
-    );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SplitPages()),
+  Future<void> register(BuildContext context) async {
+    try {
+      final response = await http.post(
+        // Uri.parse(apiUrl),
+        Uri.parse("http://172.20.103.61:8000/api/register/"),
+        body: {
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => profilePage(
-            name: nameController.text,
-            email: emailController.text,
-          ),
-        ),
-      );
-      print('Register successful!');
-    } else {
-      print('Register failed with status code: ${response.statusCode}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pushReplacement(context, 
+        MaterialPageRoute(builder: (context) => SplitPages()));
+
+        print('Register successful!');
+      } else {
+        print('Register failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Register failed: $e');
     }
-  } catch (e) {
-    print('Register failed: $e');
   }
-}
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
