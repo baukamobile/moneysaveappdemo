@@ -37,7 +37,9 @@ class SettingsPage extends StatelessWidget {
               // Navigate to notifications settings page
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationPage(title: 'MoneyApp notification',))
+                MaterialPageRoute(builder: (context) => NotificationPage(
+                  // title: 'MoneyApp notification',
+                  ))
               );
             },
           ),
