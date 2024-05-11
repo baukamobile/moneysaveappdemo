@@ -46,6 +46,8 @@ dependencies:
   connectivity: ^3.0.6
   shared_preferences: ^2.2.3
   provider: ^6.1.2
+  flutter_native_timezone: ^2.0.0
+  flutter_datetime_picker: ^1.5.1
   
   # d_chart: ^2.6.9
 

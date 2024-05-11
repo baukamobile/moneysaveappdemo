@@ -49,7 +49,7 @@ _saveExpenseTrackerIncomes(double value) async {
 }
 
 void _addExpense(Expense expense) async {
-  final url = 'http://172.20.103.61:8000/api/add_incomes/';
+  final url = 'http://172.20.103.151:8000/api/add_incomes/';
   try {
     final response = await http.post(
       Uri.parse(url),

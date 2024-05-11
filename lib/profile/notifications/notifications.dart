@@ -1,95 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:async';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+import 'notification_helper.dart';
 
-  // Инициализация плагина для уведомлений
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  
-  // Настройка настроек уведомлений для Android
-  var initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-  var initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+DateTime scheduleTime = DateTime.now();
 
-  runApp(MyApp());
+class NotificationPage extends StatefulWidget {
+  const NotificationPage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
 }
-Future<void> _showAndroidNotification(
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-  // Настройка параметров уведомления для Android
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    'channelId', // ID канала уведомлений
-    'Channel Name', // Название канала уведомлений
-    // 'Channel Description', // Описание канала уведомлений
-    importance: Importance.high,
-  );
-  var platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  // Отправка уведомления на Android
-  await flutterLocalNotificationsPlugin.show(
-      0, // Уникальный ID уведомления
-      'Заголовок уведомления',
-      'Текст уведомления',
-      platformChannelSpecifics,
-      payload: 'Уведомление payload');
-}
-void startNotifications(
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
-  Timer.periodic(Duration(seconds: 5), (Timer timer) {
-    _showAndroidNotification(flutterLocalNotificationsPlugin);
-  });
-}
-class MyApp extends StatelessWidget {
+class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Уведомления каждые 5 часов (Android)')),
-        body: Center(
-          child: Text('Пример уведомлений для Android'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            DatePickerTxt(),
+            ScheduleBtn(),
+          ],
         ),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class DatePickerTxt extends StatefulWidget {
+  const DatePickerTxt({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<DatePickerTxt> createState() => _DatePickerTxtState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
+class _DatePickerTxtState extends State<DatePickerTxt> {
   @override
-  void initState() {
-    super.initState();
-    startNotifications(flutterLocalNotificationsPlugin);
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        DatePicker.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          onChanged: (date) => scheduleTime = date,
+          onConfirm: (date) {},
+        );
+      },
+      child: const Text(
+        'Select Date Time',
+        style: TextStyle(color: Colors.blue),
+      ),
+    );
   }
+}
+
+class ScheduleBtn extends StatelessWidget {
+  const ScheduleBtn({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 186, 130),
-          leading: IconButton(onPressed: (){
-            Navigator.pop(context);
-          }, icon: Icon(Icons.arrow_back)),
-          centerTitle: true,
-          title: Text('Notifications')),
-          
-          
-        body: Center(
-          child: Text('Notification page'),
-        ),
-      ),
+    return ElevatedButton(
+      child: const Text('Schedule notifications'),
+      onPressed: () {
+        debugPrint('Notification Scheduled for $scheduleTime');
+        NotificationService().scheduleNotification(
+            title: 'Scheduled Notification',
+            body: '$scheduleTime',
+            scheduledNotificationDateTime: scheduleTime);
+      },
     );
   }
 }
