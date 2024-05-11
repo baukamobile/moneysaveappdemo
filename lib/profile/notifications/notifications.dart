@@ -71,7 +71,11 @@ class ScheduleBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: const Text('Schedule notifications'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.green[300])
+      ),
+      
+      child: const Text('Schedule notifications', style: TextStyle(color: Colors.white),),
       onPressed: () {
         debugPrint('Notification Scheduled for $scheduleTime');
         NotificationService().scheduleNotification(

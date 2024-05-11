@@ -28,19 +28,19 @@ class SettingsPage extends StatelessWidget {
               // );
             },
           ),
-          // Divider(),
-          // ListTile(
-          //   title: Text('Notifications'),
-          //   subtitle: Text('Manage notifications'),
-          //   trailing: Icon(Icons.arrow_forward_ios),
-          //   onTap: () {
-          //     // Navigate to notifications settings page
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => NotificationPage(title: 'MoneyApp notification',))
-          //     );
-          //   },
-          // ),
+          Divider(),
+          ListTile(
+            title: Text('Notifications'),
+            subtitle: Text('Manage notifications'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              // Navigate to notifications settings page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationPage(title: 'MoneyApp notification',))
+              );
+            },
+          ),
         
           Divider(),
           ListTile(
