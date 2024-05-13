@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 
 from rest_framework.views import APIView
-
+from celery.schedules import crontab
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib import redirects
 from moneyapp.settings import EMAIL_HOST_USER
@@ -24,6 +24,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import ExpenseSerializer
 # Create your views here.
+
+
+
 
 class RegisterView(APIView):
     def post(self, request):

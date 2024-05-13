@@ -144,3 +144,26 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER= 'baukabakbergen003@gmail.com'
 EMAIL_HOST_PASSWORD= 'zpxiwfcqielhmzmb'
 #upam kbxb lomv bolc
+
+
+
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+
+
+# settings.py
+
+from celery.schedules import crontab, timedelta
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'send_message_1_every_5_hours': {
+        'task': 'your_app.tasks.send_message_1',
+        'schedule': crontab(minute=0, hour='*/5'),  # Run every 5 hours
+    },
+    'send_message_2_every_5_hours': {
+        'task': 'your_app.tasks.send_message_2',
+        'schedule': timedelta(seconds=10),  # Run every 5 hours
+    },
+    # Define schedules for other messages similarly...
+}
