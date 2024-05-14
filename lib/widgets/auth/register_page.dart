@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moneyapp/models/style/style.dart';
-import 'package:moneyapp/profile/ProfilePage.dart';
+
+
 import 'package:moneyapp/widgets/auth/login_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
 import 'package:http/http.dart' as http;

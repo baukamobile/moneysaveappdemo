@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moneyapp/incomesWidgets/incomes.dart';
-import 'package:moneyapp/models/expence.dart';
 import 'package:moneyapp/profile/ProfilePage.dart';
-import 'package:moneyapp/widgets/auth/login_page.dart';
-import 'package:moneyapp/widgets/auth/register_page.dart';
-import 'package:moneyapp/widgets/expences.dart';
 import 'package:moneyapp/widgets/history/history_page.dart';
 import 'package:moneyapp/widgets/splitPages.dart';
 

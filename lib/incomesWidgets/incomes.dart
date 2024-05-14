@@ -5,7 +5,7 @@ import 'package:moneyapp/widgets/elements/drawer.dart';
 import 'package:moneyapp/widgets/expenses_list/chart.dart';
 import 'package:moneyapp/widgets/expenses_list/expenses_list.dart';
 import 'dart:convert';
-import 'package:uuid/v4.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:math';
