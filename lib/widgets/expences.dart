@@ -9,6 +9,7 @@ import 'package:uuid/v4.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class Expences extends StatefulWidget {
   const Expences({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ _saveExpenseTrackerExpenses(double value) async {
   // Остальной код остается неизменным
 
 void _addExpense(Expense expense) async {
-  final url = 'http://172.20.103.151:8000/api/add_expenses/';
+  final url = 'http://172.20.102.20:8000/api/add_expenses/';
   try {
     final response = await http.post(
       Uri.parse(url),
